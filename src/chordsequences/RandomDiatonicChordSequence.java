@@ -11,7 +11,7 @@ import chords.MinorSeventhChord;
 
 public class RandomDiatonicChordSequence extends ChordSequenceAbstract {
 	
-	Random rand = new Random();
+	private Random rand = new Random();
 	private int baseNoteForChords = 52;
 	
 	public RandomDiatonicChordSequence() {

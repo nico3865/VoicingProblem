@@ -21,7 +21,7 @@ public class ChordVoicer {
 
 	// ------------------ getters and setters: ---------------
 	
-	public void setChordSequence(ChordSequenceAbstract cs) {
+	private void setChordSequence(ChordSequenceAbstract cs) {
 		this.chordSequence = cs;
 	}
 
@@ -35,7 +35,7 @@ public class ChordVoicer {
 
 	// ------------------ functions: ------------------  
 	
-	public void voiceAllChords() {
+	private void voiceAllChords() {
 
 		// throw error if no chord sequence was passed:
 		if (this.chordSequence == null) {
@@ -69,7 +69,7 @@ public class ChordVoicer {
 	}
 
 	// these are the voicing functions requested for this problem:
-	public ChordAbstract voiceTwoChords_TEST(ChordAbstract chord1, ChordAbstract chord2) {
+	private ChordAbstract voiceTwoChords_TEST(ChordAbstract chord1, ChordAbstract chord2) {
 
 		// if first chord doesn't have a voicing defined yet, take any voicing arbitrarily for now:
 		if (((ChordAbstract) chord1).getVoicedChord() == null) {
@@ -93,7 +93,7 @@ public class ChordVoicer {
 	}
 
 	// a first, simple strategy: minimize melodic intervals and then generate only tightly voiced chords
-	public ChordAbstract voiceTwoChords_MelodicStrategy(ChordAbstract chord1, ChordAbstract chord2) {
+	private ChordAbstract voiceTwoChords_MelodicStrategy(ChordAbstract chord1, ChordAbstract chord2) {
 
 		// if first chord doesn't have a voicing defined yet, take any voicing arbitrarily for now:
 		if (((ChordAbstract) chord1).getVoicedChord() == null) {

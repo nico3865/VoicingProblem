@@ -12,7 +12,7 @@ import chords.MinorSeventhChord;
 public class RandomChordSequence extends ChordSequenceAbstract {
 	
 	private Random rand = new Random();
-	private int baseNoteForChords = 55;
+	private int baseNoteForChords = 52;
 
 	public RandomChordSequence() {
 		this.chordSequence = new ArrayList<ChordAbstract>();
