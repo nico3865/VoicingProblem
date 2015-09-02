@@ -11,7 +11,8 @@ import chords.MinorSeventhChord;
 
 public class RandomChordSequence extends ChordSequenceAbstract {
 	
-	Random rand = new Random();
+	private Random rand = new Random();
+	private int baseNoteForChords = 55;
 
 	public RandomChordSequence() {
 		this.chordSequence = new ArrayList<ChordAbstract>();
@@ -20,10 +21,10 @@ public class RandomChordSequence extends ChordSequenceAbstract {
 		ArrayList<ChordAbstract> possibleChords = new ArrayList<ChordAbstract>();
 
 		for(int i=0; i<12; i++) {
-			possibleChords.add(new MajorSeventhChord(60+i)); 
-			possibleChords.add(new MinorSeventhChord(60+i)); 
-			possibleChords.add(new DominantSeventhChord(60+i));
-			possibleChords.add(new HalfDiminishedChord(60+i)); 
+			possibleChords.add(new MajorSeventhChord(baseNoteForChords+i)); 
+			possibleChords.add(new MinorSeventhChord(baseNoteForChords+i)); 
+			possibleChords.add(new DominantSeventhChord(baseNoteForChords+i));
+			possibleChords.add(new HalfDiminishedChord(baseNoteForChords+i)); 
 
 		}
 		
