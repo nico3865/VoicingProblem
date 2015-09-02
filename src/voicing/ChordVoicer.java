@@ -4,29 +4,23 @@ import java.util.ArrayList;
 
 import chords.ChordAbstract;
 import chordsequences.ChordSequenceAbstract;
-import chordsequences.SimpleJazzTurnAround;
 
 public class ChordVoicer {
 
 	protected ChordSequenceAbstract chordSequence = null;
 
-	// For testing:
+	
+	// ------------------ constructor: -------------------------
+	
+	// constructor already populates and voices automatically:
 	public ChordVoicer(ChordSequenceAbstract cs) {
 		// setChordSequence(new SimpleJazzTurnAround());
 		setChordSequence(cs);
-		
-		// TEST --> to find when and where the voicings are changed:
-		for(int i=0; i<this.chordSequence.getChordSequence().size(); i++) {
-			if(this.chordSequence.getChordSequence().get(i).getVoicedChord() != null) {
-				System.out.print(this.chordSequence.getChordSequence().get(i).getVoicedChord());
-				System.out.print(this.chordSequence.getChordSequence().get(i));
-				System.out.println();
-			}
-		}
-		
 		voiceAllChords();
 	}
 
+	// ------------------ getters and setters: ---------------
+	
 	public void setChordSequence(ChordSequenceAbstract cs) {
 		this.chordSequence = cs;
 	}
@@ -36,10 +30,11 @@ public class ChordVoicer {
 			return chordSequence;
 		}
 		else
-			return null; // TODO throw error
-
+			return null; // TODO throw error instead
 	}
 
+	// ------------------ functions: ------------------  
+	
 	public void voiceAllChords() {
 
 		// throw error if no chord sequence was passed:
@@ -49,21 +44,20 @@ public class ChordVoicer {
 		}
 
 		// then for each chord in the sequence:
-		int counter = 0;
 		for (int i = 0; i < this.chordSequence.getChordSequence().size(); i++) {
 			
-			System.out.println("=========== chord #"+i+" in sequence ===========");
-
 			// watch for end of sequence:
 			if (i == this.chordSequence.getChordSequence().size() - 1) {
 				return; // we're done, can't voice anything more
 			}
+			
+			System.out.println("=========== chord #"+i+" in sequence ===========");
 
 			// deduce the next chord using the voiceTwoChords function:
 			try {
 				ChordAbstract chord1 = this.chordSequence.getChordSequence().get(i);
 				ChordAbstract chord2 = this.chordSequence.getChordSequence().get(i + 1);
-				ChordAbstract voicedChord = voiceTwoChords_MelodicStrategy(chord1, chord2);
+				ChordAbstract voicedChord = voiceTwoChords_MelodicStrategy(chord1, chord2); // because java passes references as function params, the values are already updated at this point
 				//this.chordSequence.getChordSequence().set(i + 1, voicedChord);
 
 			} catch (Exception e) {
@@ -98,7 +92,7 @@ public class ChordVoicer {
 		return chord2;
 	}
 
-	// a first, simple strategy:
+	// a first, simple strategy: minimize melodic intervals and then generate only tightly voiced chords
 	public ChordAbstract voiceTwoChords_MelodicStrategy(ChordAbstract chord1, ChordAbstract chord2) {
 
 		// if first chord doesn't have a voicing defined yet, take any voicing arbitrarily for now:
@@ -125,18 +119,14 @@ public class ChordVoicer {
 		octaves2.add(0);
 		chord2.setVoicing(octaves2);
 
-		// Integer highestNote_Chord2 = chord2.getVoicedChord().get(numOfNotesInChord_Chord2 - 1);
-
 		// get the highest note of the first chord:
 		int numOfNotesInChord_Chord1 = chord1.getListOfIntervalsRelativeToRootInBasePosition().size() + 1;
 		Integer highestNote_Chord1 = -1; // start with something out of midi range.
-		int highestNoteIndex = -1;
 		for(int i=0; i<numOfNotesInChord_Chord1; i++) {
 			// notes are not in order of pitch if voiced, they are in order of pitch WHEN IN BASE POSITION. 
 			Integer newNote = chord1.getVoicedChord().get(i); // beware, BAD was this: chord1.getVoicedChord().get(numOfNotesInChord_Chord1 - 1);
 			if(highestNote_Chord1 < newNote) {
 				highestNote_Chord1 = newNote;
-				highestNoteIndex = i;
 			}
 		}
 		System.out.println("chord1: " + chord1.getVoicedChord());
@@ -195,6 +185,9 @@ public class ChordVoicer {
 		
 		System.out.println("chord2: "+chord2.getVoicedChord());
 		System.out.println();
+		
+		
+		// --> ERROR CHECKS:
 		
 		// check if there's a big gap between top notes:
 		int MeasuredDifferenceAfterVoicing = Math.abs(highestNote_Chord1 - desiredHighestNote_Chord2_AfterVoicingItUpOrDown);

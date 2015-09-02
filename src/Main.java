@@ -8,20 +8,11 @@
  * last updated 2/24/2003
  */
 
-import java.io.*;
-import java.util.*;
-
-import javax.sound.midi.*; // package for all midi classes
-
 import midi.MyMidiFileWriter;
 
 import voicing.ChordVoicer;
 
-import chords.ChordAbstract;
-import chordsequences.ChordSequenceAbstract;
 import chordsequences.RandomChordSequence;
-import chordsequences.RandomDiatonicChordSequence;
-import chordsequences.SimpleJazzTurnAround;
 
 public class Main {
 
@@ -31,10 +22,9 @@ public class Main {
 		
 		// ChordVoicer cv = new ChordVoicer(new SimpleJazzTurnAround()); //RandomDiatonicChordSequence
 		// ChordVoicer cv = new ChordVoicer(new RandomDiatonicChordSequence()); //RandomChordSequence
-		ChordVoicer cv = new ChordVoicer(new RandomChordSequence()); //
-		ChordSequenceAbstract cs = cv.getChordSequence();
-		MyMidiFileWriter mfw = new MyMidiFileWriter(cs);
+		ChordVoicer cv = new ChordVoicer(new RandomChordSequence()); 
+		new MyMidiFileWriter(cv.getChordSequence());
 	
-	} // main
+	} 
 	
-} // midifile
+} 

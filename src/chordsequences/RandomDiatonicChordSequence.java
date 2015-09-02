@@ -29,7 +29,8 @@ public class RandomDiatonicChordSequence extends ChordSequenceAbstract {
 		
 		// generate 25 random diatonic chords using that list:
 		for(int i=0; i<25; i++) {
-			chordSequence.add(possibleChords.get((int) rand.nextInt(possibleChords.size())));
+			ChordAbstract clonedChord = new ChordAbstract(possibleChords.get((int) rand.nextInt(possibleChords.size()))); // beware not to use references to the same chord object many times in the chord sequence!
+			chordSequence.add(clonedChord);
 		}
 		
 	}

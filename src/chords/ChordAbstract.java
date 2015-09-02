@@ -45,7 +45,7 @@ public class ChordAbstract {
 	}
 
 		
-	// ----------------------------- methods: ---------------------------- 
+	// ----------------------------- functions: ---------------------------- 
 	
 	// whoever uses this chord class is free to voice it as they please, with this function:
 	public void setVoicing(ArrayList<Integer> listOfOctavesOfDisplacementForEachNoteOfTheChord) {
@@ -53,7 +53,7 @@ public class ChordAbstract {
 		// init voiced chord:
 		this.chordNotesAfterVoicing = new ArrayList<Integer>();
 		
-		// for each of the notes, set its actual pitch:
+		// for each of the notes, set its actual pitch using the octaves array param passed:
 		int noteCounter = 0;
 		
 		// start with root note before doing the loop:

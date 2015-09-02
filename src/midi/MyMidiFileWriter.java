@@ -83,9 +83,10 @@ public class MyMidiFileWriter {
 			ArrayList<ChordAbstract> chordSequence_asArrayList = cs.getChordSequence();
 			int barStartTime = 1;
 			int barLengthFixed = 140;
+			int counter = 0;
 			for (ChordAbstract chord : chordSequence_asArrayList) {
 
-				System.out.print("NEW CHORD: ");
+				System.out.print("CHORD # "+ (counter++) +": ");
 				for (Integer note : chord.getVoicedChord()) {
 
 					System.out.print(note + ", ");
