@@ -12,6 +12,7 @@ public class ChordAbstract {
 	
 	// output variable:
 	private ArrayList<Integer> chordNotesAfterVoicing = null; // must be null until actual voicing was defined by someone, using function below
+	private ArrayList<Integer> noteIndexesByIncreasingPitchOrder = null;
 	
 	
 	/// ---------------------------- constructors: ---------------------------- 
@@ -70,9 +71,41 @@ public class ChordAbstract {
 		
 		// that's it, the chord has concrete integer values now representing midi pitches.
 		
-		// TODO: we could and should add a check for validity: is this a valid voicing of the chord?
-		// ... Only octaves of original base position voicing are accepted.
-		// ... code:
+		// service for other classes: get the new order of note indexes by increasing pitch:
+		// REASON: notes are not in order of pitch anymore if voiced, they are in order of pitch ONLY WHEN IN BASE POSITION.
+		int numOfNotesInChord = this.getListOfIntervalsRelativeToRootInBasePosition().size() + 1;
+		Integer lowestNote = -1; // start with something out of midi range.
+		ArrayList<Integer> listOfAlreadyLowerIndexes = new ArrayList<Integer>(); 
+		boolean skip = false;
+		this.noteIndexesByIncreasingPitchOrder = new ArrayList<Integer>();
+		for(int counterOfNotesInChord=0; counterOfNotesInChord<this.chordNotesAfterVoicing.size(); counterOfNotesInChord++) { // each time we find a new lowest note, until we find the lowest.
+			lowestNote = -1;
+			for (int i = 0; i < numOfNotesInChord; i++) { // find among the remaining notes which is the lowest
+				
+				// ignore notes that already have been seen as lower and added to our listOfAlreadyTakenIndexes:
+				skip = false;
+				for(int indexOfAlreadyLowerIndexes=0; indexOfAlreadyLowerIndexes<listOfAlreadyLowerIndexes.size(); indexOfAlreadyLowerIndexes++) {
+					if(listOfAlreadyLowerIndexes.get(indexOfAlreadyLowerIndexes) == i) {
+						skip = true;
+						break;
+					}
+				}
+				
+				if(!skip){
+					Integer newNote = this.chordNotesAfterVoicing.get(i); // beware, BAD was this: chord1.getVoicedChord().get(numOfNotesInChord_Chord1 - 1);
+					if (lowestNote > newNote || lowestNote == -1) {
+						lowestNote = newNote;
+						listOfAlreadyLowerIndexes.add(i);
+						this.noteIndexesByIncreasingPitchOrder.add(i);
+					}
+				} 
+			}
+			
+		}
+		System.out.println("this.chordNotesAfterVoicing: " + this.chordNotesAfterVoicing);
+		System.out.println("this.noteIndexesByIncreasingPitchOrder: " + this.noteIndexesByIncreasingPitchOrder); // TESTING
+
+		
 		
 	}
 
@@ -83,6 +116,18 @@ public class ChordAbstract {
 	// output, retrieve chord: 
 	public ArrayList<Integer> getVoicedChord() {
 		return chordNotesAfterVoicing;
+	}
+	
+	// TODO get rid of this function, a voicing should be defined by a list of octaves to shift, only and we allow for errors with this function:
+	public void setVoicedChord(ArrayList<Integer> chord, ArrayList<Integer> voicingOctaves) {
+		this.chordNotesAfterVoicing = new ArrayList<Integer>(chord);
+		for(int i=0; i<this.chordNotesAfterVoicing.size(); i++) {
+			this.chordNotesAfterVoicing.set(i, this.chordNotesAfterVoicing.get(i) + 12 * voicingOctaves.get(i));
+		}
+	}
+
+	public ArrayList<Integer> getIndexesByIncreasingPitchOrder() {
+		return this.noteIndexesByIncreasingPitchOrder;
 	}
 
 
