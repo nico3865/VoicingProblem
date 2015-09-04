@@ -13,6 +13,7 @@ import midi.MyMidiFileWriter;
 import voicing.ChordVoicer;
 
 import chordsequences.CycleOfFifthChordSequence;
+import chordsequences.GiantStepsChordSequence;
 import chordsequences.RandomChordSequence;
 import chordsequences.RandomDiatonicChordSequence;
 
@@ -33,7 +34,8 @@ public class Main {
 		// ChordVoicer cv = new ChordVoicer(new SimpleJazzTurnAround()); //RandomDiatonicChordSequence
 		// ChordVoicer cv = new ChordVoicer(new RandomDiatonicChordSequence()); //RandomChordSequence
 		// ChordVoicer cv = new ChordVoicer(new RandomChordSequence());
-		ChordVoicer cv = new ChordVoicer(new CycleOfFifthChordSequence());
+		// ChordVoicer cv = new ChordVoicer(new CycleOfFifthChordSequence());
+		ChordVoicer cv = new ChordVoicer(new GiantStepsChordSequence());
 		
 		// outputting to midi file:
 		
