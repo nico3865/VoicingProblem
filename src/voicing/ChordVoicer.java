@@ -12,7 +12,7 @@ import chordsequences.ChordSequenceAbstract;
 public class ChordVoicer {
 
 	protected ChordSequenceAbstract chordSequence = null;
-	private ArrayList<ArrayList<Integer>> ListOfPermutations = new ArrayList<ArrayList<Integer>>(); // since method is recursive, simpler to keep as member var
+	private ArrayList<ArrayList<Integer>> listOfPermutationsOfNoteIndexesForChord2 = new ArrayList<ArrayList<Integer>>(); // since method is recursive, simpler to keep as member var
 	
 	// ------------------ constructor: -------------------------
 
@@ -250,74 +250,74 @@ public class ChordVoicer {
 		chord2.setVoicing(octaves2);
 
 		// then get the order of notes in chord1, pitch wise, because it is likely voiced, i.e. not in base position:
-		// --DONE: TURN THIS INTO A FUNCTION MEMBER OF THE CHORDABSTRACT CLASS:
-		// get order of notes, this is now done every time the setVoicing function is called.
-		// ArrayList<Integer> chord1NotesInOrderOfPitch = chord1.getIndexesByIncreasingPitchOrder();
+		// --DONE: TURN THIS INTO A FUNCTION MEMBER OF THE CHORDABSTRACT CLASS: getting order of notes, this is now done every time the setVoicing function is called.
 
 		// then for every voicing of chord2 (every possible pairing of notes from chord2 to notes from chord1),
 		// ... measure the absolute distance of all notes, and keep the voicing that minimizes it.
-		Set<Integer> voicedChord_asSet = new HashSet<Integer>(chord2.getVoicedChord());
-		ListOfPermutations = new ArrayList<ArrayList<Integer>>(); // is this necessary? causing the error?
-		ArrayList<ArrayList<Integer>> listOfPermutations = permutations(voicedChord_asSet, new Stack<Integer>(), voicedChord_asSet.size());
+		Set<Integer> chordIndexes_AsSet = new HashSet<Integer>();
+		for(int i=0; i<chord2.getListOfIntervalsRelativeToRootInBasePosition().size()+1; i++) {
+			chordIndexes_AsSet.add(i);
+		}
+		ArrayList<ArrayList<Integer>> listOfPermutationsOfNoteIndexesForChord2 = permutations(chordIndexes_AsSet, new Stack<Integer>(), chordIndexes_AsSet.size());
 		
 		int minCumulativeAbsDistance = 999999999; // very big number 
 		int bestVoicingIndex = -1;
 		int indexOfPossibleVoicing = 0;
 		ArrayList<Integer> listOfOctavesOfDisplacementForEachNoteOfTheChord;
 		ArrayList<Integer> listOfOctavesOfDisplacementForEachNoteOfTheChord_ForBestVoicingSoFar = null;
-		ArrayList<Integer> bestVoicing = null;
-		for(ArrayList<Integer> possibleVoicing : listOfPermutations) { // for all possible voicing permutations:
+		ArrayList<Integer> indexOrderOfBestVoicing = null;
+		for(ArrayList<Integer> possibleIndexOrderForChord2 : listOfPermutationsOfNoteIndexesForChord2) { // for all possible voicing permutations:
 			int cumulativeAbsDistanceForOneChord = 0;
 			listOfOctavesOfDisplacementForEachNoteOfTheChord = new ArrayList<Integer>();
 			int counterOfZeroIntervalsInOneChord2 = 0;
-			for(int i=0; i<possibleVoicing.size(); i++) { // for each note, measure the distance to the corresponding note in chord1:
+			for(int noteCounter=0; noteCounter<chord2.getVoicedChord().size(); noteCounter++) { // init octaves array to be able to use .set function:
+				listOfOctavesOfDisplacementForEachNoteOfTheChord.add(null);
+			}
+			for(int i=0; i<possibleIndexOrderForChord2.size(); i++) { // for each note, measure the distance to the corresponding note in chord1:
 				
 				// make sure that it's within 6+/- of the other note
-				int difference = chord1.getVoicedChord().get(chord1.getIndexesByIncreasingPitchOrder().get(i)) - possibleVoicing.get(i); // chord1 might not be in pitch order, but chord2 is since we just did it.
+				Integer noteChord1 = chord1.getVoicedChord().get(chord1.getIndexesByIncreasingPitchOrder().get(i));
+				Integer noteChord2_corresponding = chord2.getVoicedChord().get(possibleIndexOrderForChord2.get(i));
+				int melodicGapForPart = noteChord1 - noteChord2_corresponding; // chord1 might not be in pitch order, but chord2 is since we just did it.
 
-				// get num of octave(s) to shift up or down:
-				int numOctaves = (int) ((difference + 6 * ((int) Math.signum(difference))) / 12); // can't use Math.floor here since we want -1.10 to become 1.00, and not -2.00
-				listOfOctavesOfDisplacementForEachNoteOfTheChord.add(numOctaves);
+				// get num of octave(s) to shift up or down for voicing:
+				int numOctaves = (int) ((melodicGapForPart + 6 * ((int) Math.signum(melodicGapForPart))) / 12); // can't use Math.floor here since we want -1.10 to become 1.00, and not -2.00
+				listOfOctavesOfDisplacementForEachNoteOfTheChord.set(possibleIndexOrderForChord2.get(i), numOctaves);
 				
-				int differenceIfAlreadyMinimal = chord1.getVoicedChord().get(i) - (possibleVoicing.get(i) + 12 * numOctaves); // difference % 6; // 6 because then shifting octaves can't help to minimize the interval, it's already in the minimum range
-				int absOfDiffIfMin = (int) Math.abs(differenceIfAlreadyMinimal); // Math.sqrt(diff) to give less weight to a big gap as long as most other gaps are very small
+				int melodicGapDistanceIfAlreadyMinimal = noteChord1 - (noteChord2_corresponding + 12 * numOctaves); // difference % 6; // 6 because then shifting octaves can't help to minimize the interval, it's already in the minimum range
+				int absOfDiffIfMin = (int) Math.abs(melodicGapDistanceIfAlreadyMinimal); // Math.sqrt(diff) to give less weight to a big gap as long as most other gaps are very small
 				cumulativeAbsDistanceForOneChord = (int) (cumulativeAbsDistanceForOneChord + absOfDiffIfMin);
-				//System.out.println();
 				
-				if(differenceIfAlreadyMinimal == 0) {
-					//System.out.println();
+				if(melodicGapDistanceIfAlreadyMinimal == 0) { // TESTING
 					counterOfZeroIntervalsInOneChord2++;
 				}
 				
 			}
-			// keep min:
-			if(counterOfZeroIntervalsInOneChord2 == 2) {
-				System.out.println("in a cycle of fiths, the best voicing should have 2 unisons.");
+			if(counterOfZeroIntervalsInOneChord2 >= 2) { // TESTING
+				System.out.println("2 Unisons present in chord voicing "+possibleIndexOrderForChord2+" (in a cycle of fiths, the best voicing should have 2 unisons).");
 			}
+			// keep min:
 			if(minCumulativeAbsDistance > cumulativeAbsDistanceForOneChord) {
 				minCumulativeAbsDistance = cumulativeAbsDistanceForOneChord;
 				bestVoicingIndex = indexOfPossibleVoicing;
 				listOfOctavesOfDisplacementForEachNoteOfTheChord_ForBestVoicingSoFar = new ArrayList<Integer>(listOfOctavesOfDisplacementForEachNoteOfTheChord);
-				bestVoicing = possibleVoicing;
+				indexOrderOfBestVoicing = possibleIndexOrderForChord2;
 			}
 			indexOfPossibleVoicing++;
 		}
 		System.out.println("bestVoicingIndex: "+bestVoicingIndex);
 		System.out.println("minCumulativeAbsDistance (should never be more than 3 or 4 in a cycle of fifths): " + minCumulativeAbsDistance);
 		System.out.println("listOfOctavesOfDisplacementForEachNoteOfTheChord_ForBestVoicingSoFar: "+listOfOctavesOfDisplacementForEachNoteOfTheChord_ForBestVoicingSoFar);
-		System.out.println("bestVoicing: "+bestVoicing);
+		System.out.println("bestVoicing: "+indexOrderOfBestVoicing);
 		
-		//chord2. = listOfPermutations.get(bestVoicingIndex);
-		//chord2.setVoicing(listOfOctavesOfDisplacementForEachNoteOfTheChord_ForBestVoicingSoFar); // this is the right way to do it ... but to be refactored.
-		chord2.setVoicedChord(bestVoicing, listOfOctavesOfDisplacementForEachNoteOfTheChord_ForBestVoicingSoFar); // this is so wrong but it will work right away, before I refactor.
+		chord2.setVoicing(listOfOctavesOfDisplacementForEachNoteOfTheChord_ForBestVoicingSoFar); // this is the right way to do it ... but to be refactored (DONE).
 		
 		System.out.println("chord2.getVoicedChord(): "+chord2.getVoicedChord());
 		
 		return chord2;
 	}
 
-	// helper for getting all voicing combinations in voicerizor:
-	// BAD: from http://hmkcode.com/calculate-find-all-possible-combinations-of-an-array-using-java/
+	// helper for getting all voicing combinations in gapMinimizor:
 	// from http://stackoverflow.com/questions/14132877/order-array-in-every-possible-sequence
 	private ArrayList<ArrayList<Integer>> permutations(Set<Integer> items, Stack<Integer> permutation, int size) {
 		
@@ -327,8 +327,8 @@ public class ChordVoicer {
 		if (permutation.size() == size) {
 			/* print the permutation */
 			System.out.println(Arrays.toString(permutation.toArray(new Integer[0])));
-			ListOfPermutations.add(new ArrayList<Integer>());
-			ListOfPermutations.set(ListOfPermutations.size()-1, new ArrayList<Integer>(Arrays.asList(permutation.toArray(new Integer[0]))));
+			listOfPermutationsOfNoteIndexesForChord2.add(new ArrayList<Integer>());
+			listOfPermutationsOfNoteIndexesForChord2.set(listOfPermutationsOfNoteIndexesForChord2.size()-1, new ArrayList<Integer>(Arrays.asList(permutation.toArray(new Integer[0]))));
 		}
 
 		/* items available for permutation */
@@ -347,7 +347,7 @@ public class ChordVoicer {
 			items.add(permutation.pop());
 		}
 		
-		return ListOfPermutations;
+		return listOfPermutationsOfNoteIndexesForChord2;
 	}
 
 }

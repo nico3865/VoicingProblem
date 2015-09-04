@@ -118,14 +118,6 @@ public class ChordAbstract {
 		return chordNotesAfterVoicing;
 	}
 	
-	// TODO get rid of this function, a voicing should be defined by a list of octaves to shift, only and we allow for errors with this function:
-	public void setVoicedChord(ArrayList<Integer> chord, ArrayList<Integer> voicingOctaves) {
-		this.chordNotesAfterVoicing = new ArrayList<Integer>(chord);
-		for(int i=0; i<this.chordNotesAfterVoicing.size(); i++) {
-			this.chordNotesAfterVoicing.set(i, this.chordNotesAfterVoicing.get(i) + 12 * voicingOctaves.get(i));
-		}
-	}
-
 	public ArrayList<Integer> getIndexesByIncreasingPitchOrder() {
 		return this.noteIndexesByIncreasingPitchOrder;
 	}
