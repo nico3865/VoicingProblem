@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * 		- returns array of Integers (midi notes are just stored as Integers)
  * 
  */
-public class ChordAbstract {
+public abstract class ChordAbstract {
 
 	// input variables:
 	// (to be defined by whoever creates a subclass for a new type of chord (say sharp 11th, or even any new aggregate of notes)):
@@ -36,12 +36,36 @@ public class ChordAbstract {
 	/// ---------------------------- constructors: ---------------------------- 
 	
 	// constructor MUST define a rootNote when creating a concrete chord object:
-	public ChordAbstract(int midiRootNote) {
+	public ChordAbstract(int midiRootNote) throws Exception {
+				
+		// set intervals list, (must be defined by subclass):
+		defineChordIntervalsInIncreasingOrderOfPitch();
+		
+		// error checks: chord is within midi range? 0-127
+		if(midiRootNote < 0 || midiRootNote > 127) {
+			throw new Exception("Root note out of midi range.");
+		}
+		if(midiRootNote + this.getListOfIntervalsRelativeToRootInBasePosition().get(this.getListOfIntervalsRelativeToRootInBasePosition().size() - 1) > 127) {
+			throw new Exception("Chord notes out of midi range.");
+		}
+		// error check: convention --> are notes in increasing order of pitch in the base position?
+		if(!this.notesAreInIncreasingOrderOfPitch()) {
+			throw new Exception("Chord notes not in order of pitch in base position.");
+		}
+		
 		this.rootNote = midiRootNote; 
+		
+	}
+	
+	protected abstract void defineChordIntervalsInIncreasingOrderOfPitch();
+	
+	private boolean notesAreInIncreasingOrderOfPitch() {
+		return true;
 	}
 	
 	// copy constructor:
 	public ChordAbstract(ChordAbstract oldChord) {
+		
 		this.nameOfChord = oldChord.nameOfChord;
 		//this.listOfIntervalsRelativeToRootInBasePosition = oldChord.listOfIntervalsRelativeToRootInBasePosition; // NO deep copy!
 		this.listOfIntervalsRelativeToRootInBasePosition = new ArrayList<Integer>();
@@ -142,6 +166,8 @@ public class ChordAbstract {
 	public ArrayList<Integer> getIndexesByIncreasingPitchOrder() {
 		return this.noteIndexesByIncreasingPitchOrder;
 	}
+	
+	public abstract ChordAbstract clone();
 
 
 

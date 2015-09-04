@@ -10,7 +10,7 @@ import chords.MinorSeventhChord;
 
 public class GiantStepsChordSequence extends ChordSequenceAbstract {
 
-	public GiantStepsChordSequence() {
+	public GiantStepsChordSequence() throws Exception {
 		this.chordSequence = new ArrayList<ChordAbstract>();
 		chordSequence.add(new MajorSeventhChord(59)); // Bmaj7
 		chordSequence.add(new DominantSeventhChord(62)); // D7

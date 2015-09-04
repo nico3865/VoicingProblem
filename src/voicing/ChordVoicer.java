@@ -232,7 +232,7 @@ public class ChordVoicer {
 //			octaves.add(0);
 //			octaves.add(0);
 //			octaves.add(0);
-			octaves.add(-2);
+			octaves.add(-1);
 			octaves.add(0);
 			octaves.add(1);
 			octaves.add(2);

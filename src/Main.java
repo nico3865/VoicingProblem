@@ -24,10 +24,14 @@ import chordsequences.RandomDiatonicChordSequence;
  * - Simply instantiates a ChordVoicer with a ChordSequence (automatically voices all the chords)
  * - Then writes the midi file: instantiates MyMidiFileWriter with the chord sequence that was automatically outputted after the ChordVoicer creation
  * 
+ * TODO: for in the future:
+ * - allow to forcing root note as bass in voicing
+ * - new voicing function that will look for continuous scales in a part and favour that if possible, over just minimizing everything
+ *  
  */
 public class Main {
 
-	public static void main(String argv[]) {
+	public static void main(String argv[]) throws Exception {
 
 		// preparing the chords and their voicings:
 		

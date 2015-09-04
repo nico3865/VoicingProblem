@@ -14,7 +14,7 @@ public class RandomDiatonicChordSequence extends ChordSequenceAbstract {
 	private Random rand = new Random();
 	private int baseNoteForChords = 52;
 	
-	public RandomDiatonicChordSequence() {
+	public RandomDiatonicChordSequence() throws Exception {
 		this.chordSequence = new ArrayList<ChordAbstract>();
 		
 		// hold all possible diatonic chords in an ArrayList:
@@ -30,7 +30,7 @@ public class RandomDiatonicChordSequence extends ChordSequenceAbstract {
 		
 		// generate 25 random diatonic chords using that list:
 		for(int i=0; i<25; i++) {
-			ChordAbstract clonedChord = new ChordAbstract(possibleChords.get((int) rand.nextInt(possibleChords.size()))); // beware not to use references to the same chord object many times in the chord sequence!
+			ChordAbstract clonedChord = (possibleChords.get((int) rand.nextInt(possibleChords.size()))).clone(); // beware not to use references to the same chord object many times in the chord sequence!
 			chordSequence.add(clonedChord);
 		}
 		

@@ -10,7 +10,7 @@ import chords.MinorSeventhChord;
 
 public class CycleOfFifthChordSequence extends ChordSequenceAbstract {
 
-	public CycleOfFifthChordSequence() {
+	public CycleOfFifthChordSequence() throws Exception {
 		this.chordSequence = new ArrayList<ChordAbstract>();
 		chordSequence.add(new MinorSeventhChord(60));
 		chordSequence.add(new DominantSeventhChord(65));

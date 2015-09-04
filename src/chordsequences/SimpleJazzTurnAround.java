@@ -9,7 +9,7 @@ import chords.MinorSeventhChord;
 
 public class SimpleJazzTurnAround extends ChordSequenceAbstract {
 
-	public SimpleJazzTurnAround() {
+	public SimpleJazzTurnAround() throws Exception {
 		this.chordSequence = new ArrayList<ChordAbstract>();
 		chordSequence.add(new MajorSeventhChord(60));
 		chordSequence.add(new MinorSeventhChord(57));
