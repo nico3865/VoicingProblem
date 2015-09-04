@@ -16,6 +16,14 @@ import chordsequences.CycleOfFifthChordSequence;
 import chordsequences.RandomChordSequence;
 import chordsequences.RandomDiatonicChordSequence;
 
+/**
+ * 
+ * @author nick
+ *
+ * - Simply instantiates a ChordVoicer with a ChordSequence (automatically voices all the chords)
+ * - Then writes the midi file: instantiates MyMidiFileWriter with the chord sequence that was automatically outputted after the ChordVoicer creation
+ * 
+ */
 public class Main {
 
 	public static void main(String argv[]) {
@@ -26,7 +34,10 @@ public class Main {
 		// ChordVoicer cv = new ChordVoicer(new RandomDiatonicChordSequence()); //RandomChordSequence
 		// ChordVoicer cv = new ChordVoicer(new RandomChordSequence());
 		ChordVoicer cv = new ChordVoicer(new CycleOfFifthChordSequence());
-		new MyMidiFileWriter(cv.getChordSequence());
+		
+		// outputting to midi file:
+		
+		new MyMidiFileWriter(cv.getVoicedChordSequence());
 	
 	} 
 	

@@ -29,7 +29,7 @@ public class ChordVoicer {
 		this.chordSequence = cs;
 	}
 
-	public ChordSequenceAbstract getChordSequence() {
+	public ChordSequenceAbstract getVoicedChordSequence() {
 		if (chordSequence != null) {
 			return chordSequence;
 		}

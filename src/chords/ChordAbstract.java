@@ -2,6 +2,24 @@ package chords;
 
 import java.util.ArrayList;
 
+/**
+ * 
+ * @author nick
+ * 
+ * - A concrete chord (extends ChordAbstract) is defined by a collection of intervals relative to the root note (root note can be undefined)
+ * - Examples of concrete classes I created are:
+ * 		- DominantSeventhChord
+ * 		- HalfDiminishedChord
+ * 		- etc...
+ * - When instantiating such a concrete chord class (e.g. DominantSeventhChord), one must pass a root note
+ * - To voice a chord, the only way allowed right now is to pass *a list of octaves that will shift each note of the chord up or down (relative to the note's original octave in the base position)*, to create a new voicing.
+ * 		- e.g. (re)setting a chord to its base position would call .setVoicing([0,0,0,0]) for a 4 note chord.
+ * - NB: a voiced chord has notes *not in increasing pitch order anymore in the array* 
+ * 		- The new auxiliary list of "notes in increasing pitch order" is re-written every time the .setVoicing(...) function is called. 
+ * - The "output" after voicing a chord can be retrieved with .setVoicedChord()
+ * 		- returns array of Integers (midi notes are just stored as Integers)
+ * 
+ */
 public class ChordAbstract {
 
 	// input variables:
@@ -48,6 +66,9 @@ public class ChordAbstract {
 		
 	// ----------------------------- functions: ---------------------------- 
 	
+	/**
+	 * pass *a list of octaves that will shift each note of the chord up or down (relative to the note's original octave in the base position)*, to create a new voicing.
+	 */
 	// whoever uses this chord class is free to voice it as they please, with this function:
 	public void setVoicing(ArrayList<Integer> listOfOctavesOfDisplacementForEachNoteOfTheChord) {
 		

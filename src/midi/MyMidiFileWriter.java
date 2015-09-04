@@ -13,7 +13,13 @@ import javax.sound.midi.Track;
 import chords.ChordAbstract;
 import chordsequences.ChordSequenceAbstract;
 
-
+/**
+ * 
+ * @author nick
+ *	
+ * - just writes a ChordSequence's midi notes to a file
+ * 
+ */
 public class MyMidiFileWriter {
 	
 	public MyMidiFileWriter(ChordSequenceAbstract cs) {
