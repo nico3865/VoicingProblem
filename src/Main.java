@@ -21,7 +21,7 @@ import chordsequences.RandomDiatonicChordSequence;
  * 
  * @author nick
  *
- * - Simply instantiates a ChordVoicer with a ChordSequence (automatically voices all the chords)
+ * - Simply instantiates a ChordVoicer with a ChordSequence (automatically voices all the chords in its constructor)
  * - Then writes the midi file: instantiates MyMidiFileWriter with the chord sequence that was automatically outputted after the ChordVoicer creation
  * 
  * TODO: for in the future:
@@ -37,9 +37,9 @@ public class Main {
 		
 		// ChordVoicer cv = new ChordVoicer(new SimpleJazzTurnAround()); //RandomDiatonicChordSequence
 		// ChordVoicer cv = new ChordVoicer(new RandomDiatonicChordSequence()); //RandomChordSequence
-		// ChordVoicer cv = new ChordVoicer(new RandomChordSequence());
+		ChordVoicer cv = new ChordVoicer(new RandomChordSequence());
 		// ChordVoicer cv = new ChordVoicer(new CycleOfFifthChordSequence());
-		ChordVoicer cv = new ChordVoicer(new GiantStepsChordSequence());
+		// ChordVoicer cv = new ChordVoicer(new GiantStepsChordSequence());
 		
 		// outputting to midi file:
 		
