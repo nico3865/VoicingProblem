@@ -9,6 +9,17 @@ import java.util.Stack;
 import chords.ChordAbstract;
 import chordsequences.ChordSequenceAbstract;
 
+/**
+ * 
+ * @author nick
+ *
+ * - Provides two strategies for voicing chords:
+ * 	- voiceTwoChords_MelodicStrategy --> minimize melodic gaps for soprano only, then generate a tightly voiced chord below it
+ * 	- voiceTwoChords_GapMinimizor --> minimize melodic gaps for all parts
+ * 		- time complexity of minimizor function: goes through O(numChordsInChordSequence * numNotesInChord2 ! ) ... which is a lot
+ * - these are called in the constructor to simplify the interface ... only one button to press on for that class!
+ * 
+ */
 public class ChordVoicer {
 
 	protected ChordSequenceAbstract chordSequence = null;
@@ -154,7 +165,7 @@ public class ChordVoicer {
 			// get num of octave(s) to shift up or down:
 			int numOctaves = (int) ((difference + 6 * ((int) Math.signum(difference))) / 12); // can't use Math.floor here since we want -1.10 to become 1.00, and not -2.00
 
-			int differenceIfAlreadyMinimal = highestNote_Chord1 - (note_Chord2 + 12 * numOctaves); // difference % 6; // 6 because then shifting octaves can't help to minimize the interval, it's already in the minimum range
+			int differenceIfAlreadyMinimal = highestNote_Chord1 - (note_Chord2 + 12 * numOctaves); // then shifting octaves can't help to minimize the interval, it's already in the minimum range
 
 			// keep min: determine if it's the note of the chord with the min melodic distance to the highest note of the previous chord:
 			int differenceAbs = Math.abs(differenceIfAlreadyMinimal);
@@ -171,7 +182,7 @@ public class ChordVoicer {
 		System.out.println("desiredHighestNote_Chord2: " + desiredHighestNote_Chord2); // TESTING
 		System.out.println("desiredHighestNote_Chord2_AfterVoicingItUpOrDown: " + desiredHighestNote_Chord2_AfterVoicingItUpOrDown); // TESTING
 
-		// after finding which note would be the closest, voice the chord accordingly:
+		// after finding which note would be the closest, voice the chord accordingly: (TODO this could be a service carried out by the Chord class)
 		// i.e. put all other notes below it:
 		// ... and don't forget to put the note at the octave that is nearest to the highest note of previous chord, as detected previously:
 
@@ -284,11 +295,11 @@ public class ChordVoicer {
 				int numOctaves = (int) ((melodicGapForPart + 6 * ((int) Math.signum(melodicGapForPart))) / 12); // can't use Math.floor here since we want -1.10 to become 1.00, and not -2.00
 				listOfOctavesOfDisplacementForEachNoteOfTheChord.set(possibleIndexOrderForChord2.get(i), numOctaves);
 				
-				int melodicGapDistanceIfAlreadyMinimal = noteChord1 - (noteChord2_corresponding + 12 * numOctaves); // difference % 6; // 6 because then shifting octaves can't help to minimize the interval, it's already in the minimum range
-				int absOfDiffIfMin = (int) Math.abs(melodicGapDistanceIfAlreadyMinimal); // Math.sqrt(diff) to give less weight to a big gap as long as most other gaps are very small
+				int melodicGapDistanceIfAlreadyMinimal = noteChord1 - (noteChord2_corresponding + 12 * numOctaves); // then shifting octaves can't help to minimize the interval, it's already in the minimum range
+				int absOfDiffIfMin = (int) Math.abs(melodicGapDistanceIfAlreadyMinimal); // Math.sqrt(diff) would be to give less weight to a big gap as long as most other gaps are very small
 				cumulativeAbsDistanceForOneChord = (int) (cumulativeAbsDistanceForOneChord + absOfDiffIfMin);
 				
-				if(melodicGapDistanceIfAlreadyMinimal == 0) { // TESTING
+				if(melodicGapDistanceIfAlreadyMinimal == 0) { // TESTING: in a cycle of fifths, there should be 2 zero intervals between all chords voiced.
 					counterOfZeroIntervalsInOneChord2++;
 				}
 				

@@ -24,8 +24,8 @@ import chordsequences.RandomDiatonicChordSequence;
  * - Simply instantiates a ChordVoicer with a ChordSequence (automatically voices all the chords in its constructor)
  * - Then writes the midi file: instantiates MyMidiFileWriter with the chord sequence that was automatically outputted after the ChordVoicer creation
  * 
- * TODO: for in the future:
- * - allow to forcing root note as bass in voicing
+ * TODO: in the future:
+ * - always use root note as bass in voicing
  * - new voicing function that will look for continuous scales in a part and favour that if possible, over just minimizing everything
  *  
  */
@@ -35,8 +35,8 @@ public class Main {
 
 		// preparing the chords and their voicings:
 		
-		// ChordVoicer cv = new ChordVoicer(new SimpleJazzTurnAround()); //RandomDiatonicChordSequence
-		// ChordVoicer cv = new ChordVoicer(new RandomDiatonicChordSequence()); //RandomChordSequence
+		// ChordVoicer cv = new ChordVoicer(new SimpleJazzTurnAround());
+		// ChordVoicer cv = new ChordVoicer(new RandomDiatonicChordSequence());
 		ChordVoicer cv = new ChordVoicer(new RandomChordSequence());
 		// ChordVoicer cv = new ChordVoicer(new CycleOfFifthChordSequence());
 		// ChordVoicer cv = new ChordVoicer(new GiantStepsChordSequence());
